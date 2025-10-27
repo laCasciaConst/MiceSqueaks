@@ -1,0 +1,215 @@
+@import url("https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap");
+body {
+  font-family: "Gaegu", cursive;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-image: url("../src/archive/mouse-06.jpg");
+  background-color: #cce7ff;
+  background-size: cover;
+  background-position: center;
+  color: #543e3e;
+  overflow: hidden;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#app-wrapper {
+  display: flex;
+  gap: 2.5rem;
+  width: 70vw;
+}
+
+#left-column {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+#right-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.panel {
+  background-color: #fffaf0;
+  border: 2px solid #333;
+  border-radius: 8px;
+  box-shadow: 4px 4px 0 0 #333;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+}
+.panel-header {
+  background-color: #aed9ff;
+  border-bottom: 2px solid #333;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  box-sizing: border-box;
+}
+.panel-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  flex-grow: 1;
+  text-align: center;
+  margin: 0 10px;
+}
+.panel-content {
+  padding: 15px;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+#game-panel.panel {
+  transition: background-color 0.3s ease;
+}
+#game-panel.panel.damage-flash {
+  background-color: #ffb6c1 !important;
+}
+#game-panel.panel .panel-content {
+  padding: 0;
+  overflow: hidden;
+}
+
+.window-controls {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.control-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid #333;
+  background-color: #fff;
+}
+
+#game-header-right {
+  display: flex;
+  gap: 5px;
+  justify-content: flex-end;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+#lives-container {
+  display: contents;
+  padding: 10px;
+  box-sizing: content-box;
+  position: absolute;
+}
+#lives-container .heart-icon {
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  fill: #ff8a80;
+  stroke: none;
+}
+#lives-container .heart-icon path {
+  fill: inherit !important;
+  stroke: inherit !important;
+  transition: fill 0.2s, opacity 0.2s, transform 0.2s;
+}
+#lives-container .heart-icon.lost {
+  fill: #333 !important;
+  stroke: #333 !important;
+  transform: scale(0.8);
+  opacity: 0.3;
+}
+#lives-container .heart-icon2 {
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  fill: #ff8a80;
+  stroke: none;
+}
+
+#question-box {
+  text-align: center;
+  position: relative;
+}
+#question-box::before {
+  margin-right: 0.3em;
+}
+#question-box::after {
+  margin-left: 0.3em;
+}
+#question-box::before, #question-box::after {
+  content: '"';
+  font-size: 1.5rem;
+  color: #543e3e;
+  opacity: 0.6;
+  position: relative;
+  top: -0.1em;
+}
+
+#game-canvas {
+  width: 100%;
+  height: 65vh;
+  cursor: pointer;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 20;
+  transition: opacity 0.3s ease;
+}
+.overlay h2 {
+  font-size: 4rem;
+  margin-bottom: 10px;
+}
+.overlay p {
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+}
+.overlay button {
+  font-family: "Gaegu", cursive;
+  padding: 15px 30px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background-color: #aed9ff;
+  color: #543e3e;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 3px 3px 0 0 #333;
+}
+.overlay button:hover {
+  transform: translateY(-2px);
+  box-shadow: 5px 5px 0 0 #333;
+}
+.overlay button:active {
+  transform: translateY(1px);
+  box-shadow: 2px 2px 0 0 #333;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}

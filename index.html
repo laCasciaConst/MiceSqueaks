@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쥐 체험</title>
+    <link rel="icon" href="/src/archive/rat.ico">
+    <link rel="stylesheet" href="src/main.css">
+    <audio id="click-sound" src="/src/archive/mouse-squeak-261126.mp3" preload="auto"></audio>
+</head>
+
+<body>
+    <div id="app-wrapper">
+        <div id="left-column">
+            <div id="word-panel" class="panel">
+                <div class="panel-header">
+                    <div class="window-controls">
+                        <div class="control-dot"></div>
+                        <div class="control-dot"></div>
+                        <div class="control-dot"></div>
+                    </div>
+                    <span class="panel-title">WORD</span>
+                    <div id="lives-container" style="visibility: hidden">
+                        <svg class="heart-icon2" viewBox="0 0 24 24">
+                            <path
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                        <svg class="heart-icon2" viewBox="0 0 24 24">
+                            <path
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                        <svg class="heart-icon2" viewBox="0 0 24 24">
+                            <path
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <span id="question-box">시작!</span>
+                </div>
+            </div>
+            <div id="game-panel" class="panel">
+                <div class="panel-header">
+                    <div class="window-controls">
+                        <div class="control-dot"></div>
+                        <div class="control-dot"></div>
+                        <div class="control-dot"></div>
+                    </div>
+                    <span class="panel-title">&nbsp;GAME</span>
+                    <div id="game-header-right">
+                        <div id="lives-container">
+                            <svg class="heart-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                            </svg>
+                            <svg class="heart-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                            </svg>
+                            <svg class="heart-icon" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <canvas id="game-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+        <div id="right-column">
+            <div id="score-panel" class="panel">
+                <div class="panel-header">
+                    <div class="window-controls">
+                        <div class="control-dot"></div>
+                        <div class="control-dot"></div>
+                        <div class="control-dot"></div>
+                    </div>
+                    <span class="panel-title">SCORE</span>
+                    <div class="window-controls" style="visibility: hidden">
+                        <div class="control-dot"></div>
+                        <div class="control-dot"></div>
+                        <div class="control-dot"></div>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <span id="score">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 시작 화면 -->
+    <div id="start-screen" class="overlay">
+        <h2>쥐 체험</h2>
+        <p>제시된 단어와 같은 뜻의 외국어를 클릭하세요</p>
+        <button id="start-button">START</button>
+    </div>
+
+    <!-- 게임 오버 화면 -->
+    <div id="game-over-screen" class="overlay hidden">
+        <h2>GAME OVER!</h2>
+        <p>SCORE: <span id="final-score">0</span>점</p>
+        <button id="restart-button">다시 시작</button>
+    </div>
+
+    <script src="src/main.js"></script>
+    <script src="src/wordList.js"></script>
+</body>
+
+</html>

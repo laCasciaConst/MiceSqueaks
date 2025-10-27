@@ -1,0 +1,143 @@
+"use strict";
+
+var wordData = [{
+  kor: "사과",
+  eng: "Apple",
+  jpn: "りんご",
+  chn: "苹果",
+  fra: "Pomme",
+  ita: "Mela"
+}, {
+  kor: "바나나",
+  eng: "Banana",
+  jpn: "バナナ",
+  chn: "香蕉",
+  fra: "Banane",
+  ita: "Banana"
+}, {
+  kor: "오렌지",
+  eng: "Orange",
+  jpn: "オレンジ",
+  chn: "橙子",
+  fra: "Orange",
+  ita: "Arancia"
+}, {
+  kor: "포도",
+  eng: "Grape",
+  jpn: "ぶどう",
+  chn: "葡萄",
+  fra: "Raisin",
+  ita: "Uva"
+}, {
+  kor: "딸기",
+  eng: "Strawberry",
+  jpn: "いちご",
+  chn: "草莓",
+  fra: "Fraise",
+  ita: "Fragola"
+}, {
+  kor: "수박",
+  eng: "Watermelon",
+  jpn: "すいか",
+  chn: "西瓜",
+  fra: "Pasteque",
+  ita: "Anguria"
+}, {
+  kor: "강아지",
+  eng: "Dog",
+  jpn: "いぬ",
+  chn: "狗",
+  fra: "Chien",
+  ita: "Cane"
+}, {
+  kor: "고양이",
+  eng: "Cat",
+  jpn: "ねこ",
+  chn: "猫",
+  fra: "Chat",
+  ita: "Gatto"
+}, {
+  kor: "책",
+  eng: "Book",
+  jpn: "ほん",
+  chn: "书",
+  fra: "Livre",
+  ita: "Libro"
+}, {
+  kor: "연필",
+  eng: "Pencil",
+  jpn: "えんぴつ",
+  chn: "铅笔",
+  fra: "Crayon",
+  ita: "Matita"
+}, {
+  kor: "학교",
+  eng: "School",
+  jpn: "がっこう",
+  chn: "学校",
+  fra: "Ecole",
+  ita: "Scuola"
+}, {
+  kor: "집",
+  eng: "House",
+  jpn: "いえ",
+  chn: "家",
+  fra: "Maison",
+  ita: "Casa"
+}, {
+  kor: "사랑",
+  eng: "Love",
+  jpn: "あい",
+  chn: "爱",
+  fra: "Amour",
+  ita: "Amore"
+}, {
+  kor: "친구",
+  eng: "Friend",
+  jpn: "ともだち",
+  chn: "朋友",
+  fra: "Ami",
+  ita: "Amico"
+}, {
+  kor: "행복",
+  eng: "Happiness",
+  jpn: "しあわせ",
+  chn: "幸福",
+  fra: "Bonheur",
+  ita: "Felicita"
+}, {
+  kor: "컴퓨터",
+  eng: "Computer",
+  jpn: "コンピュータ",
+  chn: "电脑",
+  fra: "Ordinateur",
+  ita: "Computer"
+}, {
+  kor: "휴대폰",
+  eng: "Phone",
+  jpn: "けいたい",
+  chn: "手机",
+  fra: "Telephone",
+  ita: "Telefono"
+}, {
+  kor: "물",
+  eng: "Water",
+  jpn: "みず",
+  chn: "水",
+  fra: "Eau",
+  ita: "Acqua"
+}, {
+  kor: "불",
+  eng: "Fire",
+  jpn: "ひ",
+  chn: "火",
+  fra: "Feu",
+  ita: "Fuoco"
+}, {
+  kor: "나무",
+  eng: "Tree",
+  jpn: "き",
+  chn: "树",
+  fra: "Arbre",
+  ita: "Albero"
+}];
