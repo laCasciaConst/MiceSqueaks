@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let lives = 0;
     let score = 0;
     let MAX_LIVES = 3;
-    const WORD_SPAWN_INTERVAL = 900; //1.1초
+    const WORD_SPAWN_INTERVAL = 1100; //1.1초
     const HIT_TOL = 10;
     const clickSound = document.getElementById('click-sound');
 
@@ -95,7 +95,7 @@ function renderLives() {
             isCorrect,
             x: Math.random() * Math.max(1, (canvas.width - wordWidth)),
             y: -fontSize,
-            speed: 0.8,
+            speed: 1,
             width: wordWidth,
             height: fontSize,
             fontSize,
@@ -131,8 +131,6 @@ function renderLives() {
             ctx.font = `700 ${w.fontSize * scale}px Gaegu`;
             ctx.globalAlpha = alpha;
             ctx.fillStyle = w.isCorrect ? '#43a047' : '#e53935'; // 맞으면 초록, 틀리면 빨강
-            ctx.shadowColor = ctx.fillStyle;
-            ctx.shadowBlur = 12;
             ctx.fillText(w.text, w.x, w.y);
             ctx.restore();
             continue;
