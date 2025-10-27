@@ -95,7 +95,7 @@ function renderLives() {
             isCorrect,
             x: Math.random() * Math.max(1, (canvas.width - wordWidth)),
             y: -fontSize,
-            speed: 1,
+            speed: 1.2,
             width: wordWidth,
             height: fontSize,
             fontSize,
