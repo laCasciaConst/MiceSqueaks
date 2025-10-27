@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let lives = 0;
     let score = 0;
     let MAX_LIVES = 3;
-    const WORD_SPAWN_INTERVAL = 1100; //1.1초
+    const WORD_SPAWN_INTERVAL = 900; //1.1초
     const HIT_TOL = 10;
     const clickSound = document.getElementById('click-sound');
 
