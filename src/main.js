@@ -10,12 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const WORD_SPAWN_INTERVAL = 1100; //1.1초
     const HIT_TOL = 10;
     const clickSound = document.getElementById('click-sound');
+    const videoContainer = document.getElementById('intro-video-container');
+    const introVideo = document.getElementById('intro-video');
 
     let canvas, ctx;
     let questionEl, scoreEl, livesContainer, heartIcons;
     let startScreen, gameOverScreen, startButton, restartButton, finalScoreEl;
     let gamePanelContent;
-    let introPlayer;
 
     function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
 
@@ -26,46 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const top    = w.y - w.height - HIT_TOL;
         const bottom = w.y + HIT_TOL;
         return px >= left && px <= right && py >= top && py <= bottom;
-    }
-
-    function onYouTubeIframeAPIReady() {
-        introPlayer = new YT.Player('intro-video', {
-            videoId: 'rUbq_IXBaYg',
-            playerVars: {
-            'autoplay': 1,
-            'controls': 0,
-            'mute': 1,
-            'enablejsapi': 1,
-            'modestbranding': 1,
-            'rel': 0,
-            'showinfo': 0,
-            'fs': 1
-            },
-            events: {
-            'onReady': onVideoReady,
-            'onStateChange': onVideoStateChange
-            }
-        });
-    }
-
-    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
-
-    function onVideoReady() {
-    console.log('Intro video ready');
-    const container = document.getElementById('intro-video-container');
-    container.classList.remove('hidden');
-    introPlayer.playVideo();
-    }
-
-    function onVideoStateChange(event) {
-        if (event.data === YT.PlayerState.ENDED) {
-            console.log('Intro video ended');
-            const container = document.getElementById('intro-video-container');
-            container.classList.add('hidden');
-
-            startScreen.classList.remove('hidden'); // 시작 화면 보이기
-            if (startscreen) startScreen.classList.remove('hidden');
-        }
     }
 
     function renderLives() {
@@ -90,6 +51,16 @@ document.addEventListener('DOMContentLoaded', () => {
             celebrate();
         }
     }
+
+        introVideo.addEventListener('ended', () => {
+        videoContainer.classList.add('hidden');
+        startScreen.classList.remove('hidden');
+    });
+
+  // 혹시 자동재생이 막힌 경우 대비
+    introVideo.play().catch(err => {
+        console.warn('autoplay blocked:', err);
+    });
 
     function resizeCanvas() {
         canvas.width = gamePanelContent.clientWidth;
