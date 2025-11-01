@@ -30,6 +30,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function onYouTubeIframeAPIReady() {
         introPlayer = new YT.Player('intro-video', {
+            videoId: 'rUbq_IXBaYg',
+            playerVars: {
+            'autoplay': 1,
+            'controls': 0,
+            'mute': 1,
+            'enablejsapi': 1,
+            'modestbranding': 1,
+            'rel': 0,
+            'showinfo': 0,
+            'fs': 1
+            },
             events: {
             'onReady': onVideoReady,
             'onStateChange': onVideoStateChange
@@ -41,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Intro video ready');
     const container = document.getElementById('intro-video-container');
     container.classList.remove('hidden');
+    introPlayer.playVideo();
     }
 
     function onVideoStateChange(event) {
@@ -48,8 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Intro video ended');
             const container = document.getElementById('intro-video-container');
             container.classList.add('hidden');
-            
+
             startScreen.classList.remove('hidden'); // 시작 화면 보이기
+            if (startscreen) startScreen.classList.remove('hidden');
         }
     }
 

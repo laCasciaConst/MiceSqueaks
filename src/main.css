@@ -224,11 +224,11 @@ body {
   align-items: center;
 }
 #intro-video-container iframe {
-  width: 90vw;
+  width: 80vw;
   height: 45vw;
   border-radius: 21px;
 }
-#intro-video-containerhidden {
+#intro-video-container.hidden {
   display: none;
 }
 

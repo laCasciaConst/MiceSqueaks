@@ -252,14 +252,14 @@ body {
 #intro-video-container {
   position: fixed;
   inset: 0;
-z-index: 99;
-background: black;
-display: flex;
+  z-index: 99;
+  background: black;
+  display: flex;
   justify-content: center;
   align-items: center;
 
   iframe {
-    width: 90vw;
+    width: 80vw;
     height: 45vw;
     // max-width: 800px;
     // max-height: 450px;
@@ -268,7 +268,7 @@ display: flex;
     // box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
-  &hidden {
+  &.hidden {
     display: none;
   }
 }
@@ -311,5 +311,3 @@ display: flex;
     opacity: 0;
   }
 }
-
-
