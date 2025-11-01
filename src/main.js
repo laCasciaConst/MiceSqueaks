@@ -52,6 +52,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    introVideo.volume = 0;
+    introVideo.play().then(() => {
+        setTimeout(() => {
+            videoContainer.volume = 1.0;
+        }, 500);
+    }).catch(err => {
+        console.warn('autoplay blocked:', err);
+    });
+
         introVideo.addEventListener('ended', () => {
         videoContainer.classList.add('hidden');
         startScreen.classList.remove('hidden');
