@@ -48,6 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+
     function onVideoReady() {
     console.log('Intro video ready');
     const container = document.getElementById('intro-video-container');
