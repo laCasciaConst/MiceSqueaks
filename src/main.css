@@ -212,4 +212,59 @@ body {
 .hidden {
   opacity: 0;
   pointer-events: none;
+}
+
+#intro-video-container {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#intro-video-container iframe {
+  width: 90vw;
+  height: 45vw;
+  border-radius: 21px;
+}
+#intro-video-containerhidden {
+  display: none;
+}
+
+.celebration-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ff4081;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20px 40px;
+  border-radius: 20px;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  opacity: 0;
+  animation: celebration-pop 0.4s ease-out forwards, celebration-fadeout 0.5s ease-in 2.5s forwards;
+}
+
+@keyframes celebration-pop {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+@keyframes celebration-fadeout {
+  to {
+    opacity: 0;
+  }
 }/*# sourceMappingURL=main.css.map */

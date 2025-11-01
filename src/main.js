@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let questionEl, scoreEl, livesContainer, heartIcons;
     let startScreen, gameOverScreen, startButton, restartButton, finalScoreEl;
     let gamePanelContent;
+    let introPlayer;
 
     function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
 
@@ -27,23 +28,52 @@ document.addEventListener('DOMContentLoaded', () => {
         return px >= left && px <= right && py >= top && py <= bottom;
     }
 
-function renderLives() {
-    const n = clamp(lives, 0, MAX_LIVES);
-    const hearts = document.querySelectorAll('.heart-icon'); // 최신 상태 가져오기
+    function onYouTubeIframeAPIReady() {
+        introPlayer = new YT.Player('intro-video', {
+            events: {
+            'onReady': onVideoReady,
+            'onStateChange': onVideoStateChange
+            }
+        });
+    }
 
-    hearts.forEach((heart, i) => {
-        if (i < n) {
-            heart.classList.remove('lost'); // 남은 목숨
-        } else {
-            heart.classList.add('lost'); // 잃은 목숨
+    function onVideoReady() {
+    console.log('Intro video ready');
+    const container = document.getElementById('intro-video-container');
+    container.classList.remove('hidden');
+    }
+
+    function onVideoStateChange(event) {
+        if (event.data === YT.PlayerState.ENDED) {
+            console.log('Intro video ended');
+            const container = document.getElementById('intro-video-container');
+            container.classList.add('hidden');
+            
+            startScreen.classList.remove('hidden'); // 시작 화면 보이기
         }
-        console.log(i, 'lost?', heart.classList.contains('lost'));
-    });
-}
+    }
+
+    function renderLives() {
+        const n = clamp(lives, 0, MAX_LIVES);
+        const hearts = document.querySelectorAll('.heart-icon'); // 최신 상태 가져오기
+
+        hearts.forEach((heart, i) => {
+            if (i < n) {
+                heart.classList.remove('lost'); // 남은 목숨
+            } else {
+                heart.classList.add('lost'); // 잃은 목숨
+            }
+            console.log(i, 'lost?', heart.classList.contains('lost'));
+        });
+    }
 
     function updateUI() {
         scoreEl.textContent = String(score);
         renderLives();
+
+        if (score >= 100) {
+            celebrate();
+        }
     }
 
     function resizeCanvas() {
@@ -60,6 +90,22 @@ function renderLives() {
         }
     }
 
+    function celebrate() {
+        cancelAnimationFrame(gameLoopId);
+        clearInterval(wordSpawnerId);
+
+        const panel = document.getElementById('game-panel');
+        const msg = document.createElement('div');
+        msg.className = 'celebration-message'; // 스타일은 CSS에서
+        msg.textContent = '🎉 축하합니다! 100점 달성! 🎉';
+        panel.appendChild(msg);
+
+        setTimeout(() => {
+            msg.remove();
+            gameOverScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        }, 3000);
+    }
 
     function newRound() {
         fallingWords = [];
