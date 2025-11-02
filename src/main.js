@@ -256,6 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         screensaverEnabled = false;
         stopScreensaver();
+        clearInterval(idleTimer);
 
         gameOverScreen.classList.remove('hidden');
     }
@@ -282,7 +283,8 @@ document.addEventListener('DOMContentLoaded', () => {
         wordSpawnerId = setInterval(spawnRandomWord, WORD_SPAWN_INTERVAL);
 
         screensaverEnabled = true;
-        resetIdleTimer();
+        updateActivity();
+        startIdleCheckLoop();
         }
 
     function init() {
@@ -323,11 +325,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let idleTimer = null;
-    const IDLE_LIMIT = 40000; // 40초
+    const IDLE_LIMIT = 30000; 
     const screensaverContainer = document.getElementById('screensaver-container');
     const screensaverVideo = document.getElementById('screensaver-video');
     let screensaverActive = false;
     let screensaverEnabled = false;
+    let lastActivityTime = Date.now();
+
+    function updateActivity() {
+        lastActivityTime = Date.now();
+        if (screensaverActive) stopScreensaver();
+    }
+
+    function startIdleCheckLoop() {
+        clearInterval(idleTimer);
+        idleTimer = setInterval(() => {
+            if (!screensaverEnabled) return;
+            const elapsed = Date.now() - lastActivityTime;
+            if (elapsed >= IDLE_LIMIT && !screensaverActive) {
+                startScreensaver();
+            }
+        }, 1000);
+    }
 
     function resetIdleTimer() {
         if (!screensaverEnabled) return;
@@ -336,21 +355,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startScreensaver() {
-    if (!screensaverEnabled || screensaverActive) return;
+    if (screensaverActive) return;
     screensaverActive = true;
-
     screensaverContainer.classList.remove('hidden');
     screensaverVideo.currentTime = 0;
     screensaverVideo.muted = true; 
     screensaverVideo.play();
-
     console.log('화면보호기 시작됨');
     }
 
 function stopScreensaver() {
     if (!screensaverActive) return;
     screensaverActive = false;
-
     screensaverVideo.pause();
     screensaverContainer.classList.add('hidden');
     console.log('화면보호기 종료됨');
@@ -361,7 +377,7 @@ function stopScreensaver() {
 
     ['mousemove','mousedown','touchstart','keydown','scroll'].forEach(ev => {
         document.addEventListener(ev, () => {
-            if (screensaverEnabled) stopScreensaver();
+            if (screensaverEnabled) updateActivity();
         });
     });
 });
