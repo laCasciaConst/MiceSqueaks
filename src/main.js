@@ -100,15 +100,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const panel = document.getElementById('game-panel');
         const msg = document.createElement('div');
-        msg.className = 'celebration-message'; // 스타일은 CSS에서
+        msg.className = 'celebration-message'; 
         msg.textContent = '🎉 축하합니다! 100점 달성! 🎉';
         panel.appendChild(msg);
+
+        setTimeout(() => {
+            msg.classList.add('fade-out'); 
+        }, 4000);
 
         setTimeout(() => {
             msg.remove();
             gameOverScreen.classList.add('hidden');
             startScreen.classList.remove('hidden');
-        }, 3000);
+        }, 5500);
     }
 
     function newRound() {

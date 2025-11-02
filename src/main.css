@@ -295,24 +295,30 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   text-align: center;
   opacity: 0;
-  animation: celebration-pop 0.4s ease-out forwards, celebration-fadeout 0.5s ease-in 2.5s forwards;
+  animation: pop-in 0.4s ease-out forwards, fadeOut 0.5s ease-in 2.5s forwards;
 }
 
-@keyframes celebration-pop {
-  0% {
+@keyframes pop-in {
+  from {
     transform: translate(-50%, -50%) scale(0.5);
     opacity: 0;
   }
-  60% {
-    transform: translate(-50%, -50%) scale(1.2);
+  to {
+    transform: translate(-50%, -50%) scale(1);
     opacity: 1;
   }
-  100% {
+}
+.fade-out {
+  animation: fadeOut 1.2s ease forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
-}
-@keyframes celebration-fadeout {
   to {
     opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
   }
 }/*# sourceMappingURL=main.css.map */
