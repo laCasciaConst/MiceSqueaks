@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         screensaverEnabled = false;
         stopScreensaver();
-        
+
         gameOverScreen.classList.remove('hidden');
     }
 
@@ -357,7 +357,7 @@ function stopScreensaver() {
 
     ['mousemove','mousedown','touchstart','keydown','scroll'].forEach(ev => {
         document.addEventListener(ev, () => {
-            if (screensaverrEnabled) stopScreensaver();
+            if (screensaverEnabled) stopScreensaver();
         });
     });
 });
