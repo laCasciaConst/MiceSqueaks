@@ -55,12 +55,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    introVideo.pause(); // 자동 재생 방지
+
+    goButton.addEventListener('click', async () => {
+        goScreen.style.display = 'none';
+
+        try {
+            await document.documentElement.requestFullscreen();
+            console.log('Fullscreen mode enabled');
+        } catch (err) {
+            console.warn('Fullscreen request denied:', err);
+        }
+
+        introVideo.muted = false;
+        introVideo.currentTime = 0;
+        introVideo.play().then(() => {
+            console.log('intro video started');
+        }).catch((e) => console.warn('video play blocked:', e));
 
         introVideo.addEventListener('ended', () => {
-        videoContainer.classList.add('hidden');
-        startScreen.classList.remove('hidden');
+            videoContainer.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        }, { once: true });
     });
-
 
     function resizeCanvas() {
         canvas.width = gamePanelContent.clientWidth;
