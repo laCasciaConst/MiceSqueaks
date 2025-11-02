@@ -249,6 +249,10 @@ document.addEventListener('DOMContentLoaded', () => {
         wordSpawnerId = null;
 
         finalScoreEl.textContent = String(score);
+
+        screensaverEnabled = false;
+        stopScreensaver();
+        
         gameOverScreen.classList.remove('hidden');
     }
 
@@ -272,6 +276,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (wordSpawnerId) clearInterval(wordSpawnerId);
         wordSpawnerId = setInterval(spawnRandomWord, WORD_SPAWN_INTERVAL);
+
+        screensaverEnabled = true;
+        resetIdleTimer();
         }
 
     function init() {
@@ -310,4 +317,47 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         init();
     }
+
+    let idleTimer = null;
+    const IDLE_LIMIT = 40000; // 40초
+    const screensaverContainer = document.getElementById('screensaver-container');
+    const screensaverVideo = document.getElementById('screensaver-video');
+    let screensaverActive = false;
+    let screensaverEnabled = false;
+
+    function resetIdleTimer() {
+        if (!screensaverEnabled) return;
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(startScreensaver, IDLE_LIMIT);
+    }
+
+    function startScreensaver() {
+    if (!screensaverEnabled || screensaverActive) return;
+    screensaverActive = true;
+
+    screensaverContainer.classList.remove('hidden');
+    screensaverVideo.currentTime = 0;
+    screensaverVideo.muted = true; 
+    screensaverVideo.play();
+
+    console.log('화면보호기 시작됨');
+    }
+
+function stopScreensaver() {
+    if (!screensaverActive) return;
+    screensaverActive = false;
+
+    screensaverVideo.pause();
+    screensaverContainer.classList.add('hidden');
+    console.log('화면보호기 종료됨');
+
+    location.reload();
+    resetIdleTimer();
+    }
+
+    ['mousemove','mousedown','touchstart','keydown','scroll'].forEach(ev => {
+        document.addEventListener(ev, () => {
+            if (screensaverrEnabled) stopScreensaver();
+        });
+    });
 });
