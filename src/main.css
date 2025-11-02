@@ -245,6 +245,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #aed9ff;
 }
 #intro-video-container #go-screen {
   position: absolute;
