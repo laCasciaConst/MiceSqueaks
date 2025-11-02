@@ -12,11 +12,11 @@ const wordData = [
     { kor: "학교", eng: "School", jpn: "がっこう", chn: "学校", fra: "Ecole", ita: "Scuola" },
     { kor: "집", eng: "House", jpn: "いえ", chn: "家", fra: "Maison", ita: "Casa" },
     { kor: "사랑", eng: "Love", jpn: "あい", chn: "爱", fra: "Amour", ita: "Amore" },
-    { kor: "친구", eng: "Friend", jpn: "ともだち", chn: "朋友", fra: "Ami", ita: "Amico" },
-    { kor: "행복", eng: "Happiness", jpn: "しあわせ", chn: "幸福", fra: "Bonheur", ita: "Felicita" },
     { kor: "컴퓨터", eng: "Computer", jpn: "コンピュータ", chn: "电脑", fra: "Ordinateur", ita: "Computer" },
     { kor: "휴대폰", eng: "Phone", jpn: "けいたい", chn: "手机", fra: "Telephone", ita: "Telefono" },
     { kor: "물", eng: "Water", jpn: "みず", chn: "水", fra: "Eau", ita: "Acqua" },
     { kor: "불", eng: "Fire", jpn: "ひ", chn: "火", fra: "Feu", ita: "Fuoco" },
-    { kor: "나무", eng: "Tree", jpn: "き", chn: "树", fra: "Arbre", ita: "Albero" }
+    { kor: "나무", eng: "Tree", jpn: "き", chn: "树", fra: "Arbre", ita: "Albero" }, 
+    { kor: "산", eng: "Mountain", jpn: "やま", chn: "山", fra: "Montagne", ita: "Montagna" },
+    { kor: "바다", eng: "Sea", jpn: "うみ", chn: "海", fra: "Mer", ita: "Mare" },
 ];

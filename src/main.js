@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const clickSound = document.getElementById('click-sound');
     const videoContainer = document.getElementById('intro-video-container');
     const introVideo = document.getElementById('intro-video');
+            
+    const goScreen = document.getElementById('go-screen');
+    const goButton = document.getElementById('go-button');
 
     let canvas, ctx;
     let questionEl, scoreEl, livesContainer, heartIcons;
@@ -52,24 +55,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    introVideo.volume = 0;
-    introVideo.play().then(() => {
-        setTimeout(() => {
-            videoContainer.volume = 1.0;
-        }, 500);
-    }).catch(err => {
-        console.warn('autoplay blocked:', err);
-    });
 
         introVideo.addEventListener('ended', () => {
         videoContainer.classList.add('hidden');
         startScreen.classList.remove('hidden');
     });
 
-  // 혹시 자동재생이 막힌 경우 대비
-    introVideo.play().catch(err => {
-        console.warn('autoplay blocked:', err);
-    });
 
     function resizeCanvas() {
         canvas.width = gamePanelContent.clientWidth;

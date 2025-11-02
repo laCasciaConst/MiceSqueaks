@@ -182,6 +182,7 @@ body {
 .overlay h2 {
   font-size: 4rem;
   margin-bottom: 10px;
+  cursor-events: none;
 }
 .overlay p {
   font-size: 1.8rem;
@@ -232,6 +233,12 @@ body {
 }
 #intro-video-container.hidden {
   display: none;
+}
+#intro-video-container button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1.5rem;
+  cursor: pointer;
 }
 
 .celebration-message {
