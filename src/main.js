@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
     const goScreen = document.getElementById('go-screen');
     const goButton = document.getElementById('go-button');
+    const questionImg = document.getElementById('word-illustration');
 
     let canvas, ctx;
     let questionEl, scoreEl, livesContainer, heartIcons;
@@ -113,6 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function newRound() {
         fallingWords = [];
         currentQuestion = { ...wordData[Math.floor(Math.random() * wordData.length)] };
+        questionImg.src = currentQuestion.img;
+        questionImg.alt = currentQuestion.kor;
         questionEl.textContent = currentQuestion.kor;
     }
 
@@ -296,6 +299,8 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('resize', resizeCanvas);
         canvas.addEventListener('click', handleCanvasClick);
         startButton.addEventListener('click', startGame);
+        questionEl.classList.add('hidden');
+        questionImg.classList.remove('hidden');
         restartButton.addEventListener('click', startGame);
     }
 

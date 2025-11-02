@@ -7,12 +7,33 @@
     <title>쥐 체험</title>
     <link rel="icon" href="../MiceSqueaks/src/archive/rat.ico">
     <link rel="stylesheet" href="src/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
     <audio id="click-sound" src="../MiceSqueaks/src/archive/mouse-squeak-261126.mp3" preload="auto"></audio>
 </head>
 
 <body>
     <div id="app-wrapper">
         <div id="left-column">
+            <div id="score-panel" class="panel">
+                <div class="panel-header">
+                    <div class="window-controls">
+                        <div class="control-dot"></div>
+                        <div class="control-dot"></div>
+                        <div class="control-dot"></div>
+                    </div>
+                    <span class="panel-title">SCORE</span>
+                    <div class="window-controls" style="visibility: hidden">
+                        <div class="control-dot"></div>
+                        <div class="control-dot"></div>
+                        <div class="control-dot"></div>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <span id="score">0</span><span>&nbsp;/&nbsp;100</span>
+                </div>
+            </div>
             <div id="word-panel" class="panel">
                 <div class="panel-header">
                     <div class="window-controls">
@@ -38,8 +59,11 @@
                 </div>
                 <div class="panel-content">
                     <span id="question-box">시작!</span>
+                    <img id="word-illustration" class="hidden"/>
                 </div>
             </div>
+        </div>
+        <div id="right-column">
             <div id="game-panel" class="panel">
                 <div class="panel-header">
                     <div class="window-controls">
@@ -70,32 +94,12 @@
                 </div>
             </div>
         </div>
-        <div id="right-column">
-            <div id="score-panel" class="panel">
-                <div class="panel-header">
-                    <div class="window-controls">
-                        <div class="control-dot"></div>
-                        <div class="control-dot"></div>
-                        <div class="control-dot"></div>
-                    </div>
-                    <span class="panel-title">SCORE</span>
-                    <div class="window-controls" style="visibility: hidden">
-                        <div class="control-dot"></div>
-                        <div class="control-dot"></div>
-                        <div class="control-dot"></div>
-                    </div>
-                </div>
-                <div class="panel-content">
-                    <span id="score">0</span><span>&nbsp;/&nbsp;100</span>
-                </div>
-            </div>
-        </div>
     </div>
 
-    <!-- 유튭 영상 -->
+    <!-- 영상 -->
     <div id="intro-video-container">
         <div id="go-screen" class="overlay">
-            <h2>쥐 따라가기</h2>
+            <h1>쥐 따라가기</h1>
             <button id="go-button">GO ?</button>
         </div>
         <video id="intro-video" autoplay playsinline>
