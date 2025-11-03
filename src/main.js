@@ -112,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
             msg.remove();
             gameOverScreen.classList.add('hidden');
             startScreen.classList.remove('hidden');
+            location.reload();
         }, 5500);
     }
 
