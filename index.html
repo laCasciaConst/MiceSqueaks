@@ -105,8 +105,11 @@
     <!-- 영상 -->
     <div id="intro-video-container">
         <div id="go-screen" class="overlay">
-            <h1>쥐 따라가기</h1>
-            <button id="go-button">GO ?</button>
+            <video id="go-video" autoplay playsinline muted style="height: 30rem">
+                <source src="src/video.mp4" type="video/mp4">
+                브라우저가 비디오 태그를 지원하지 않습니다.
+            </video>
+            <button id="go-button">쥐 따라가기</button>
         </div>
         <video id="intro-video" autoplay playsinline>
             <source src="src/video.mp4" type="video/mp4">
