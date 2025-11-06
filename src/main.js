@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isCorrect,
             x: Math.random() * Math.max(1, canvas.width - wordWidth),
             y: -fontSize,
-            speed: 2.5,
+            speed: 1,
             width: wordWidth,
             height: fontSize,
             fontSize,
@@ -248,7 +248,10 @@ document.addEventListener('DOMContentLoaded', () => {
         goScreen.style.display = '';
         startScreen.classList.add('hidden');
         gameOverScreen.classList.add('hidden');
-        messageBox.classList.add('hidden');
+        if (messageBox) {
+            messageBox.classList.add('hidden');
+            messageBox.classList.remove('show');
+        }
         introVideo.pause();
         introVideo.currentTime = 0;
     }
@@ -284,11 +287,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = e.target.closest('[data-action]');
             if (!btn) return;
             e.preventDefault();
+
             const action = btn.dataset.action;
+            const messageBox = document.getElementById('celebration-message');
+            const gameOverBox = document.getElementById('game-over-screen');
+
             if (action === 'retry') {
-                messageBox.classList.add('hidden');
+                if (messageBox) {
+                    messageBox.classList.add('hidden');
+                    messageBox.classList.remove('show');
+                }
                 startGame();
-            } else if (action === 'home') {
+            }
+            else if (action === 'home') {
+                if (messageBox) messageBox.classList.add('hidden');
+                if (gameOverBox) gameOverBox.classList.add('hidden');
                 resetToIntro();
             }
         });
