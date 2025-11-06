@@ -280,22 +280,59 @@ body {
   cursor: pointer;
 }
 
-.celebration-message {
+#celebration-message {
+  background: rgba(0, 0, 0, 0.65);
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2rem;
-  font-weight: 700;
-  color: #ff4081;
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 20px 40px;
-  border-radius: 20px;
+  inset: 0;
   z-index: 9999;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   text-align: center;
   opacity: 0;
-  animation: pop-in 0.4s ease-out forwards, fadeOut 0.5s ease-in 2.5s forwards;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+#celebration-message.show {
+  opacity: 1;
+  pointer-events: all;
+}
+#celebration-message p {
+  background: #fff;
+  font-size: 2.5rem;
+  border-radius: 16px;
+  padding: 30px 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  font-weight: 700;
+  color: #333;
+}
+#celebration-message .celebration-content .celebration-buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+}
+#celebration-message .celebration-content .celebration-buttons button {
+  font-family: "Gaegu", cursive, sans-serif;
+  padding: 15px 30px;
+  font-size: 2rem;
+  font-weight: 700;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background-color: #aed9ff;
+  color: #543e3e;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 3px 3px 0 0 #333;
+}
+#celebration-message .celebration-content .celebration-buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: 5px 5px 0 0 #333;
+}
+#celebration-message .celebration-content .celebration-buttons button:active {
+  transform: translateY(1px);
+  box-shadow: 2px 2px 0 0 #333;
 }
 
 @keyframes pop-in {
@@ -321,4 +358,41 @@ body {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.9);
   }
+}
+#game-over-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+#game-over-screen .celebration-buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+}
+#game-over-screen .celebration-buttons button {
+  font-family: "Gaegu", cursive, sans-serif;
+  padding: 15px 30px;
+  font-size: 2rem;
+  font-weight: 700;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background-color: #aed9ff;
+  color: #543e3e;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 3px 3px 0 0 #333;
+}
+#game-over-screen .celebration-buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: 5px 5px 0 0 #333;
+}
+#game-over-screen .celebration-buttons button:active {
+  transform: translateY(1px);
+  box-shadow: 2px 2px 0 0 #333;
 }/*# sourceMappingURL=main.css.map */

@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ===== 전역 상태 =====
+    // ===== 상수 =====
+    const WORD_SPAWN_INTERVAL = 1100;
+    const HIT_TOL = 10;
+
+    // ===== 상태 =====
     let gameLoopId = null;
     let wordSpawnerId = null;
     let currentQuestion = null;
@@ -7,115 +11,97 @@ document.addEventListener('DOMContentLoaded', () => {
     let lives = 0;
     let score = 0;
     let MAX_LIVES = 3;
-    const WORD_SPAWN_INTERVAL = 1100; //1.1초
-    const HIT_TOL = 10;
+
+    // ===== 기본 DOM =====
     const clickSound = document.getElementById('click-sound');
     const videoContainer = document.getElementById('intro-video-container');
     const introVideo = document.getElementById('intro-video');
-            
     const goScreen = document.getElementById('go-screen');
     const goButton = document.getElementById('go-button');
     const questionImg = document.getElementById('word-illustration');
 
-    let canvas, ctx;
-    let questionEl, scoreEl, livesContainer, heartIcons;
-    let startScreen, gameOverScreen, startButton, restartButton, finalScoreEl;
-    let gamePanelContent;
+    // ===== 나중에 초기화되는 요소 =====
+    let canvas, ctx, questionEl, scoreEl, livesContainer, heartIcons;
+    let startScreen, gameOverScreen, startButton, finalScoreEl;
+    let gamePanelContent, messageBox;
 
-    function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+    // ===== 유틸 =====
+    const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
-    // 클릭 허용 오차 10px 확장 히트박스
+    function playClickSound() {
+        try {
+        clickSound.currentTime = 0;
+        clickSound.play();
+        } catch (e) {
+        console.warn('click sound blocked:', e);
+        }
+    }
+
     function isHit(px, py, w) {
-        const left   = w.x - HIT_TOL;
-        const right  = w.x + w.width + HIT_TOL;
-        const top    = w.y - w.height - HIT_TOL;
+        const left = w.x - HIT_TOL;
+        const right = w.x + w.width + HIT_TOL;
+        const top = w.y - w.height - HIT_TOL;
         const bottom = w.y + HIT_TOL;
         return px >= left && px <= right && py >= top && py <= bottom;
     }
 
+  // ===== 목숨 표시 =====
     function renderLives() {
         const n = clamp(lives, 0, MAX_LIVES);
-        const hearts = document.querySelectorAll('.heart-icon'); // 최신 상태 가져오기
-
+        const hearts = document.querySelectorAll('.heart-icon');
         hearts.forEach((heart, i) => {
-            if (i < n) {
-                heart.classList.remove('lost'); // 남은 목숨
-            } else {
-                heart.classList.add('lost'); // 잃은 목숨
-            }
-            console.log(i, 'lost?', heart.classList.contains('lost'));
+        heart.classList.toggle('lost', i >= n);
         });
     }
 
+  // ===== UI 업데이트 =====
     function updateUI() {
         scoreEl.textContent = String(score);
         renderLives();
-
-        if (score >= 100) {
-            celebrate();
-        }
     }
 
-    introVideo.pause(); // 자동 재생 방지
-
-    goButton.addEventListener('click', async () => {
-        goScreen.style.display = 'none';
-
-        try {
-            await document.documentElement.requestFullscreen();
-            console.log('Fullscreen mode enabled');
-        } catch (err) {
-            console.warn('Fullscreen request denied:', err);
-        }
-
-        introVideo.muted = false;
-        introVideo.currentTime = 0;
-        introVideo.play().then(() => {
-            console.log('intro video started');
-        }).catch((e) => console.warn('video play blocked:', e));
-
-        introVideo.addEventListener('ended', () => {
-            videoContainer.classList.add('hidden');
-            startScreen.classList.remove('hidden');
-        }, { once: true });
-    });
-
-    function resizeCanvas() {
-        canvas.width = gamePanelContent.clientWidth;
-        canvas.height = gamePanelContent.clientHeight;
+  // ===== 폭발 =====
+    function triggerExplosion(word) {
+        word.exploding = true;
+        word.explodeTime = performance.now();
     }
 
-        function playClickSound() {
-        try {
-            clickSound.currentTime = 0; // 재생 위치 리셋
-            clickSound.play();
-        } catch (e) {
-            console.warn('click sound blocked:', e);
-        }
+  // ===== 단어 스폰 =====
+    function spawnRandomWord() {
+        if (lives <= 0) return;
+        const langs = ['eng', 'jpn', 'chn', 'fra', 'ita'];
+        const isCorrect = Math.random() < 0.3;
+
+        let wordText;
+            if (isCorrect) {
+            const correctLang = langs[Math.floor(Math.random() * langs.length)];
+            wordText = currentQuestion[correctLang];
+            } else {
+            const rw = wordData[Math.floor(Math.random() * wordData.length)];
+            const rl = langs[Math.floor(Math.random() * langs.length)];
+            wordText = rw[rl];
+            if (Object.values(currentQuestion).includes(wordText)) return spawnRandomWord();
+            }
+
+        const fontSize = clamp(Math.floor(canvas.width / 25), 24, 32);
+        ctx.font = `700 ${fontSize}px Gaegu`;
+        const wordWidth = ctx.measureText(wordText).width;
+
+            fallingWords.push({
+            text: wordText,
+            isCorrect,
+            x: Math.random() * Math.max(1, canvas.width - wordWidth),
+            y: -fontSize,
+            speed: 2.5,
+            width: wordWidth,
+            height: fontSize,
+            fontSize,
+            exploding: false,
+            explodeTime: 0
+        });
     }
 
-    function celebrate() {
-        cancelAnimationFrame(gameLoopId);
-        clearInterval(wordSpawnerId);
-
-        const panel = document.getElementById('game-panel');
-        const msg = document.createElement('div');
-        msg.className = 'celebration-message'; 
-        msg.textContent = '🎉 축하합니다! 100점 달성! 🎉';
-        panel.appendChild(msg);
-
-        setTimeout(() => {
-            msg.classList.add('fade-out'); 
-        }, 4000);
-
-        setTimeout(() => {
-            msg.remove();
-            gameOverScreen.classList.add('hidden');
-            startScreen.classList.remove('hidden');
-            location.reload();
-        }, 5500);
-    }
-
+  // ===== 라운드 생성 =====
     function newRound() {
         fallingWords = [];
         currentQuestion = { ...wordData[Math.floor(Math.random() * wordData.length)] };
@@ -124,88 +110,46 @@ document.addEventListener('DOMContentLoaded', () => {
         questionEl.textContent = currentQuestion.kor;
     }
 
-    function spawnRandomWord() {
-        if (lives <= 0) return;
-
-        const langs = ['eng', 'jpn', 'chn', 'fra', 'ita'];
-        const isCorrect = Math.random() < 0.3;
-
-        let wordText;
-        if (isCorrect) {
-            const correctLang = langs[Math.floor(Math.random() * langs.length)];
-            wordText = currentQuestion[correctLang];
-        } else {
-            const rw = wordData[Math.floor(Math.random() * wordData.length)];
-            const rl = langs[Math.floor(Math.random() * langs.length)];
-            wordText = rw[rl];
-            if (Object.values(currentQuestion).includes(wordText)) {
-            return spawnRandomWord();
-            }
-        }
-
-        const fontSize = clamp(Math.floor(canvas.width / 25), 24, 32);
-        ctx.font = `700 ${fontSize}px Gaegu`;
-        const wordWidth = ctx.measureText(wordText).width;
-
-        fallingWords.push({
-            text: wordText,
-            isCorrect,
-            x: Math.random() * Math.max(1, (canvas.width - wordWidth)),
-            y: -fontSize,
-            speed: 2.3,
-            width: wordWidth,
-            height: fontSize,
-            fontSize,
-            exploding: false,
-            explodeTime: 0  
-        });
-    }
-
-    function triggerExplosion(word) {
-        word.exploding = true;
-        word.explodeTime = performance.now();
-        console.log(`💥 explode: ${word.text} (correct=${word.isCorrect})`);
-    }
-
+  // ===== 게임 루프 =====
     function gameLoop(time) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         for (let i = fallingWords.length - 1; i >= 0; i--) {
-            const w = fallingWords[i];
+        const w = fallingWords[i];
 
-            if (w.exploding) {
-                const elapsed = time - w.explodeTime;
-                const duration = 400; // 폭발 애니메이션 0.2초
-                const progress = elapsed / duration;
+        if (w.exploding) {
+            const elapsed = time - w.explodeTime;
+            const duration = 400;
+            const progress = elapsed / duration;
 
-                if (progress >= 1) {
-                    fallingWords.splice(i, 1);
-                    continue;
-                }
-            const scale = 1 + progress * 1.5;    // 커졌다가 사라짐
-            const alpha = 1 - progress;          // 점점 투명해짐
-            ctx.save();
-            ctx.font = `700 ${w.fontSize * scale}px Gaegu`;
-            ctx.globalAlpha = alpha;
-            ctx.fillStyle = w.isCorrect ? '#43a047' : '#e53935'; // 맞으면 초록, 틀리면 빨강
-            ctx.fillText(w.text, w.x, w.y);
-            ctx.restore();
+            if (progress >= 1) {
+            fallingWords.splice(i, 1);
             continue;
             }
 
-            w.y += w.speed;
-            ctx.font = `700 ${w.fontSize}px Gaegu`;
-            ctx.fillStyle = '#543e3e';
+            const scale = 1 + progress * 1.5;
+            const alpha = 1 - progress;
+            ctx.save();
+            ctx.font = `700 ${w.fontSize * scale}px Gaegu`;
+            ctx.globalAlpha = alpha;
+            ctx.fillStyle = w.isCorrect ? '#43a047' : '#e53935';
             ctx.fillText(w.text, w.x, w.y);
+            ctx.restore();
+            continue;
+        }
 
-            if (w.y > canvas.height + w.height) {
-            fallingWords.splice(i, 1);
-            }
+        w.y += w.speed;
+        ctx.font = `700 ${w.fontSize}px Gaegu`;
+        ctx.fillStyle = '#543e3e';
+        ctx.fillText(w.text, w.x, w.y);
+
+        if (w.y > canvas.height + w.height) fallingWords.splice(i, 1);
         }
 
         if (lives > 0) gameLoopId = requestAnimationFrame(gameLoop);
     }
 
+  // ===== 클릭 처리 =====
     function handleCanvasClick(e) {
         playClickSound();
         if (lives <= 0) return;
@@ -214,171 +158,136 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = e.clientY - rect.top;
 
         for (let i = fallingWords.length - 1; i >= 0; i--) {
-            const w = fallingWords[i];
-            if (isHit(x, y, w)) {
+        const w = fallingWords[i];
+        if (isHit(x, y, w)) {
             if (w.isCorrect) {
-                score += 10;
-                fallingWords.forEach(f => triggerExplosion(f));
-                newRound();
+            score += 10;
+            fallingWords.forEach(f => triggerExplosion(f));
+            newRound();
             } else {
-                triggerExplosion(w);
-                handleMistake();
+            triggerExplosion(w);
+            handleMistake();
             }
             fallingWords.splice(i, 1);
             updateUI();
             return;
-            }
+        }
         }
     }
 
-    // ===== 생명/종료 =====
+  // ===== 실수 처리 =====
     function handleMistake() {
         lives = clamp(lives - 1, 0, MAX_LIVES);
-        console.log('lives 감소됨:', lives);
-        console.log('heartIcons:', heartIcons);
-        console.log('heartIcons 길이:', heartIcons.length);
-        updateUI('handleMistake');
-
+        updateUI();
         const panel = document.getElementById('game-panel');
         panel.classList.add('damage-flash');
         setTimeout(() => panel.classList.remove('damage-flash'), 150);
-
         if (lives === 0) endGame();
     }
 
-
+  // ===== 종료 =====
     function endGame() {
-        if (gameLoopId) cancelAnimationFrame(gameLoopId);
-        gameLoopId = null;
-        if (wordSpawnerId) clearInterval(wordSpawnerId);
-        wordSpawnerId = null;
-
+        cancelAnimationFrame(gameLoopId);
+        clearInterval(wordSpawnerId);
         finalScoreEl.textContent = String(score);
-
-        screensaverEnabled = false;
-        stopScreensaver();
-        clearInterval(idleTimer);
-
         gameOverScreen.classList.remove('hidden');
     }
 
+  // ===== 게임 시작 =====
     function startGame() {
         score = 0;
         lives = MAX_LIVES;
         fallingWords = [];
-        console.log('▶ START GAME, lives =', lives);
-
-        // 지난 상태 싹 초기화
         heartIcons.forEach(h => h.classList.remove('lost'));
         updateUI();
 
         startScreen.classList.add('hidden');
         gameOverScreen.classList.add('hidden');
-
         newRound();
 
-        if (gameLoopId) cancelAnimationFrame(gameLoopId);
         gameLoopId = requestAnimationFrame(gameLoop);
-
-        if (wordSpawnerId) clearInterval(wordSpawnerId);
         wordSpawnerId = setInterval(spawnRandomWord, WORD_SPAWN_INTERVAL);
+    }
 
-        screensaverEnabled = true;
-        updateActivity();
-        startIdleCheckLoop();
-        }
+  // ===== 전체 리셋 (처음으로 버튼용) =====
+    function resetToIntro() {
+        cancelAnimationFrame(gameLoopId);
+        clearInterval(wordSpawnerId);
+        score = 0;
+        lives = MAX_LIVES;
+        fallingWords = [];
+        videoContainer.classList.remove('hidden');
+        goScreen.style.display = '';
+        startScreen.classList.add('hidden');
+        gameOverScreen.classList.add('hidden');
+        messageBox.classList.add('hidden');
+        introVideo.pause();
+        introVideo.currentTime = 0;
+    }
 
+  // ===== 캔버스 리사이즈 =====
+    function resizeCanvas() {
+        canvas.width = gamePanelContent.clientWidth;
+        canvas.height = gamePanelContent.clientHeight;
+    }
+
+  // ===== 초기화 =====
     function init() {
-    // DOM 의존 선택자
         canvas = document.getElementById('game-canvas');
         ctx = canvas.getContext('2d');
-
         questionEl = document.getElementById('question-box');
         scoreEl = document.getElementById('score');
         livesContainer = document.getElementById('lives-container');
         heartIcons = livesContainer.querySelectorAll('.heart-icon');
-
         startScreen = document.getElementById('start-screen');
         gameOverScreen = document.getElementById('game-over-screen');
         startButton = document.getElementById('start-button');
-        restartButton = document.getElementById('restart-button');
         finalScoreEl = document.getElementById('final-score');
-
         gamePanelContent = document.querySelector('#game-panel .panel-content');
-
+        messageBox = document.getElementById('celebration-message');
         MAX_LIVES = heartIcons.length || 3;
-
-        resizeCanvas();
 
         window.addEventListener('resize', resizeCanvas);
         canvas.addEventListener('click', handleCanvasClick);
         startButton.addEventListener('click', startGame);
-        questionEl.classList.add('hidden');
-        questionImg.classList.remove('hidden');
-        restartButton.addEventListener('click', startGame);
-    }
 
-    // DOM 완성 후 시작
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
-
-    let idleTimer = null;
-    const IDLE_LIMIT = 30000; 
-    const screensaverContainer = document.getElementById('screensaver-container');
-    const screensaverVideo = document.getElementById('screensaver-video');
-    let screensaverActive = false;
-    let screensaverEnabled = false;
-    let lastActivityTime = Date.now();
-
-    function updateActivity() {
-        lastActivityTime = Date.now();
-        if (screensaverActive) stopScreensaver();
-    }
-
-    function startIdleCheckLoop() {
-        clearInterval(idleTimer);
-        idleTimer = setInterval(() => {
-            if (!screensaverEnabled) return;
-            const elapsed = Date.now() - lastActivityTime;
-            if (elapsed >= IDLE_LIMIT && !screensaverActive) {
-                startScreensaver();
+        // 위임형 클릭 (다시하기, 처음으로 버튼용)
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-action]');
+            if (!btn) return;
+            e.preventDefault();
+            const action = btn.dataset.action;
+            if (action === 'retry') {
+                messageBox.classList.add('hidden');
+                startGame();
+            } else if (action === 'home') {
+                resetToIntro();
             }
-        }, 1000);
-    }
-
-    function resetIdleTimer() {
-        if (!screensaverEnabled) return;
-        clearTimeout(idleTimer);
-        idleTimer = setTimeout(startScreensaver, IDLE_LIMIT);
-    }
-
-    function startScreensaver() {
-    if (screensaverActive) return;
-    screensaverActive = true;
-    screensaverContainer.classList.remove('hidden');
-    screensaverVideo.currentTime = 0;
-    screensaverVideo.muted = true; 
-    screensaverVideo.play();
-    console.log('화면보호기 시작됨');
-    }
-
-function stopScreensaver() {
-    if (!screensaverActive) return;
-    screensaverActive = false;
-    screensaverVideo.pause();
-    screensaverContainer.classList.add('hidden');
-    console.log('화면보호기 종료됨');
-
-    location.reload();
-    resetIdleTimer();
-    }
-
-    ['mousemove','mousedown','touchstart','keydown','scroll'].forEach(ev => {
-        document.addEventListener(ev, () => {
-            if (screensaverEnabled) updateActivity();
         });
-    });
+
+            resizeCanvas();
+        }
+
+    // ===== 인트로 버튼 =====
+        goButton.addEventListener('click', async () => {
+            goScreen.style.display = 'none';
+                try {
+                await document.documentElement.requestFullscreen();
+                } catch (err) {
+                console.warn('Fullscreen request denied:', err);
+            }
+
+        introVideo.muted = false;
+        introVideo.currentTime = 0;
+        introVideo.play().catch(e => console.warn('video play blocked:', e));
+
+            introVideo.addEventListener('ended', () => {
+                videoContainer.classList.add('hidden');
+                startScreen.classList.remove('hidden');
+                }, { once: true });
+        });
+
+  // ===== 실행 =====
+    introVideo.pause();
+    init();
 });

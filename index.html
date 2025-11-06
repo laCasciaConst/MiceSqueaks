@@ -105,7 +105,7 @@
     <!-- 영상 -->
     <div id="intro-video-container">
         <div id="go-screen" class="overlay">
-            <video id="go-video" autoplay playsinline muted style="height: 30rem">
+            <video id="go-video" autoplay playsinline muted style="height: 30rem" loop="loop">
                 <source src="src/video.mp4" type="video/mp4">
                 브라우저가 비디오 태그를 지원하지 않습니다.
             </video>
@@ -128,11 +128,26 @@
     <div id="game-over-screen" class="overlay hidden">
         <h2>GAME OVER!</h2>
         <p>SCORE: <span id="final-score">0</span>점</p>
-        <button id="restart-button">다시 시작</button>
+        <div class="celebration-buttons">
+            <button class="retry-btn" type="button" data-action="retry">다시하기</button>
+            <button class="home-btn" type="button" data-action="home">처음으로</button>
+        </div>
+    </div>
+
+    <!-- 축하 메시지 -->
+    <div id="celebration-message" class="hidden">
+        <div class="celebration-content">
+            <p>🎉 100점 달성! 이제 새로운 곳에 적응했어요! 🎉</p>
+            <div class="celebration-buttons">
+                <button class="retry-btn" type="button" data-action="retry">다시하기</button>
+                <button class="home-btn" type="button" data-action="home">처음으로</button>
+            </div>
+        </div>
     </div>
 
     <script src="src/main.js"></script>
     <script src="src/wordList.js"></script>
+
 </body>
 
 </html>

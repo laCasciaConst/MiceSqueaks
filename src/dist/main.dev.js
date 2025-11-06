@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
     startScreen = document.getElementById('start-screen');
     gameOverScreen = document.getElementById('game-over-screen');
     startButton = document.getElementById('start-button');
-    restartButton = document.getElementById('restart-button');
+    restartButton = document.getElementById('retry-btn');
     finalScoreEl = document.getElementById('final-score');
     gamePanelContent = document.querySelector('#game-panel .panel-content');
     MAX_LIVES = heartIcons.length || 3;
