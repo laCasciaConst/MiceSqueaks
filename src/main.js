@@ -126,8 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         questionImg.src = currentQuestion.img;
         questionImg.alt = currentQuestion.kor;
         questionImg.classList.remove("hidden");
-
-        questionEl.textContent = currentQuestion.kor;
+        questionEl.classList.add("hidden");
     }
 
   // ===== 게임 루프 =====
