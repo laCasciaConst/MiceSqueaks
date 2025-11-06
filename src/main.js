@@ -117,7 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const availableWords = wordData.filter(w => !usedWords.includes(w.kor));
         if (availableWords.length === 0) {
-        console.log('모든 단어를 다 썼음. 다시 초기화.');
         usedWords = [];
     }
 
@@ -126,6 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         questionImg.src = currentQuestion.img;
         questionImg.alt = currentQuestion.kor;
+        questionImg.classList.remove("hidden");
+
         questionEl.textContent = currentQuestion.kor;
     }
 
