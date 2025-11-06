@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateUI() {
         scoreEl.textContent = String(score);
         renderLives();
+        if (score >= 100) celebrate();
     }
 
   // ===== 폭발 =====
@@ -194,6 +195,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function celebrate() {
+        cancelAnimationFrame(gameLoopId);
+        clearInterval(wordSpawnerId);
+        messageBox.classList.remove('hidden');
+        messageBox.classList.add('show');
+    }
+
   // ===== 실수 처리 =====
     function handleMistake() {
         lives = clamp(lives - 1, 0, MAX_LIVES);
@@ -284,30 +292,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 resetToIntro();
             }
         });
-
             resizeCanvas();
-        }
+    }
 
     // ===== 인트로 버튼 =====
-        goButton.addEventListener('click', async () => {
-            goScreen.style.display = 'none';
-                try {
-                await document.documentElement.requestFullscreen();
-                } catch (err) {
-                console.warn('Fullscreen request denied:', err);
-            }
-
+    goButton.addEventListener('click', async () => {
+        goScreen.style.display = 'none';
+        try {
+        await document.documentElement.requestFullscreen();
+        } catch {}
         introVideo.muted = false;
         introVideo.currentTime = 0;
-        introVideo.play().catch(e => console.warn('video play blocked:', e));
+        introVideo.play().catch(() => {});
+        introVideo.addEventListener('ended', () => {
+        videoContainer.classList.add('hidden');
+        startScreen.classList.remove('hidden');
+        }, { once: true });
+    });
 
-            introVideo.addEventListener('ended', () => {
-                videoContainer.classList.add('hidden');
-                startScreen.classList.remove('hidden');
-                }, { once: true });
-        });
-
-  // ===== 실행 =====
     introVideo.pause();
     init();
 });
