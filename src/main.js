@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isCorrect,
             x: Math.random() * Math.max(1, canvas.width - wordWidth),
             y: -fontSize,
-            speed: 1,
+            speed: 2.5,
             width: wordWidth,
             height: fontSize,
             fontSize,
