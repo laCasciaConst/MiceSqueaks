@@ -11,9 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let lives = 0;
     let score = 0;
     let MAX_LIVES = 3;
+    let usedWords = [];
 
     // ===== 기본 DOM =====
     const clickSound = document.getElementById('click-sound');
+    const wrongSound = document.getElementById('wrong-sound');
     const videoContainer = document.getElementById('intro-video-container');
     const introVideo = document.getElementById('intro-video');
     const goScreen = document.getElementById('go-screen');
@@ -35,6 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) {
         console.warn('click sound blocked:', e);
         }
+    }
+
+    function playWrongSound() { // ✅ 틀릴 때 사운드
+        try {
+        wrongSound.currentTime = 0;
+        wrongSound.play();
+        } catch {}
     }
 
     function isHit(px, py, w) {
@@ -104,7 +113,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===== 라운드 생성 =====
     function newRound() {
         fallingWords = [];
-        currentQuestion = { ...wordData[Math.floor(Math.random() * wordData.length)] };
+
+        const availableWords = wordData.filter(w => !usedWords.includes(w.kor));
+        if (availableWords.length === 0) {
+        console.log('모든 단어를 다 썼음. 다시 초기화.');
+        usedWords = [];
+    }
+
+        currentQuestion = { ...availableWords[Math.floor(Math.random() * availableWords.length)] };
+        usedWords.push(currentQuestion.kor);
+
         questionImg.src = currentQuestion.img;
         questionImg.alt = currentQuestion.kor;
         questionEl.textContent = currentQuestion.kor;
@@ -158,20 +176,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = e.clientY - rect.top;
 
         for (let i = fallingWords.length - 1; i >= 0; i--) {
-        const w = fallingWords[i];
-        if (isHit(x, y, w)) {
-            if (w.isCorrect) {
-            score += 10;
-            fallingWords.forEach(f => triggerExplosion(f));
-            newRound();
-            } else {
-            triggerExplosion(w);
-            handleMistake();
+            const w = fallingWords[i];
+            if (isHit(x, y, w)) {
+                if (w.isCorrect) {
+                score += 10;
+                fallingWords.forEach(f => triggerExplosion(f));
+                newRound();
+                } else {
+                playWrongSound(); 
+                triggerExplosion(w);
+                handleMistake();
+                }
+                fallingWords.splice(i, 1);
+                updateUI();
+                return;
             }
-            fallingWords.splice(i, 1);
-            updateUI();
-            return;
-        }
         }
     }
 
@@ -198,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
         score = 0;
         lives = MAX_LIVES;
         fallingWords = [];
+        usedWords = [];
         heartIcons.forEach(h => h.classList.remove('lost'));
         updateUI();
 
