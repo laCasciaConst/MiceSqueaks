@@ -1,0 +1,230 @@
+@import url("https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap");
+
+$bg-sky: #cce7ff;
+$panel-bg: #fffaf0;
+$panel-header: #aed9ff;
+$panel-border-color: #333;
+$text-color: #543e3e;
+$heart-color: #ff8a80;
+$font-family: "Gaegu", cursive;
+$gap: 2.5rem;
+$border: 2px solid $panel-border-color;
+
+body {
+  font-family: $font-family;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+
+  background-image: url("../src/archive/mouse-06.jpg");
+  background-color: $bg-sky;
+  background-size: cover;
+  background-position: center;
+  color: $text-color;
+  overflow: hidden;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#app-wrapper {
+  display: flex;
+  gap: $gap;
+  width: 70vw;
+  height: 100%;
+}
+
+#left-column {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+#right-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+.panel {
+  background-color: $panel-bg;
+  border: $border;
+  border-radius: 8px;
+  box-shadow: 4px 4px 0 0 $panel-border-color;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+
+  &-header {
+    background-color: $panel-header;
+    border-bottom: $border;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    box-sizing: border-box;
+  }
+
+  &-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    flex-grow: 1;
+    text-align: center;
+    margin: 0 10px;
+  }
+
+  &-content {
+    padding: 15px;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+}
+
+#game-panel {
+  .panel-content {
+    padding: 0;
+    overflow: hidden;
+  }
+}
+
+.window-controls {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.control-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid $panel-border-color;
+  background-color: #fff;
+}
+
+// .header-placeholder {
+//   width: 57px;
+//   flex-shrink: 0;
+// }
+
+#game-header-right {
+  display: flex;
+  gap: 5px;
+  justify-content: flex-end;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+#lives-container {
+  display: contents;
+  padding: 10px;
+  box-sizing: content-box;
+  position: absolute;
+}
+
+.heart-icon {
+  width: 24px;
+  height: 24px;
+  fill: $heart-color;
+  transition: transform 0.2s ease, opacity 0.3s ease;
+
+  &.lost {
+    transform: scale(0.8);
+    opacity: 0.3;
+    stroke: $panel-border-color;
+    stroke-width: 1.5px;
+  }
+}
+
+#question-box {
+  text-align: center;
+  position: relative;
+
+  &::before {
+    margin-right: 0.3em;
+  }
+
+  &::after {
+    margin-left: 0.3em;
+  }
+
+  &::before,
+  &::after {
+    content: '"';
+    font-size: 1.5rem;
+    color: $text-color;
+    opacity: 0.6;
+    position: relative;
+    top: -0.1em;
+  }
+}
+
+#game-canvas {
+  width: 100%;
+  height: 65vh;
+  cursor: pointer;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 20;
+  transition: opacity 0.3s ease;
+
+  h2 {
+    font-size: 4rem;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+  }
+
+  button {
+    font-family: $font-family;
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border: $border;
+    border-radius: 8px;
+    background-color: $panel-header;
+    color: $text-color;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 3px 3px 0 0 $panel-border-color;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 5px 5px 0 0 $panel-border-color;
+    }
+
+    &:active {
+      transform: translateY(1px);
+      box-shadow: 2px 2px 0 0 $panel-border-color;
+    }
+  }
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
